@@ -5,6 +5,7 @@ import java.util.*;
  * an actress/actor node will be movies, and vice-versa.
  */
 interface Node {
+	public Node parent = null;
 	/**
 	 * Returns the name of the node (e.g., "Judy Garland").
 	 * @return the name of the Node.
