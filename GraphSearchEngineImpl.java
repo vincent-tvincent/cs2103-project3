@@ -29,10 +29,25 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 
 	public GraphSearchEngineImpl () {
 	}
-	public List<Node> bfs(Node start, Node target){
+	public List<Node> bfs(List<Node> path,Node start, Node target){
+		if(!visited.isEmpty()){
+			List<Node> currentPath = path;
+			currentPath.add(start);
+			if(start == target){return currentPath;}
+			Node node = unvisited.dequeue();
+			visited.add(node);
+			for(Node n: node.getNeighbors()){
+				if(!visited.contains(n)){
+					unvisited.enqueue(n);
+				}
+				bfs(currentPath, n,target);
+			}
+		}
 		return null;
 	}
 	public List<Node> findShortestPath (Node s, Node t) {
-		return ;  // TODO implement me.
+		unvisited.enqueue(s);
+		return bfs(new LinkedList<Node>(),s,t);
+		// TODO implement me.
 	}
 }
