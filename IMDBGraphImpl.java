@@ -5,10 +5,7 @@ import java.util.stream.*;
 import java.util.function.*;
 
 public class IMDBGraphImpl implements IMDBGraph {
-	// Set this to the directory path containing the IMDB files. On Linux/Mac OS,
-	// this might be: "/Users/sarah/IMDB". On Windows, this might be:
-	// "C:/Users/sarah/IMDB". (These are made-up examples but give a sense
-	// of the required syntax.)
+	// Set this to the directory path containing the IMDB files.
 	private static final String IMDB_DIRECTORY = "Data";
 	private static final int PROGRESS_FREQUENCY = 10000;
 
@@ -91,10 +88,24 @@ public class IMDBGraphImpl implements IMDBGraph {
 					}
 
 					// Create a new node for the actor, add them to _actorNamesToNodes,
-					// and set the neighbors of the new actor node appropriately.
-					// Also set the actor to be a neighbor of each of the actor's movies.
 					final IMDBNode actorNode = new IMDBNode(finalName);
-					// TODO: finish me...
+					_actorNamesToNodes.put(finalName, actorNode);
+					// foreach title
+					for(int i = 0; i < knownFor.length; i++) {
+						if(knownFor[i] != null) {
+							String titleID = knownFor[i];
+							IMDBNode movieNode = _movieNamesToNodes.get(idsToTitles.get(titleID));
+
+							if(movieNode != null) {
+								//set actorNode neighbor
+								actorNode._neighbors.add(movieNode);
+
+								//set movieNode neighbor
+								movieNode._neighbors.add(actorNode);
+							}
+						}
+					}
+					_actors.add(actorNode);
 				}
 			}
 		}
@@ -148,8 +159,9 @@ public class IMDBGraphImpl implements IMDBGraph {
 		// Create nodes for the movies
 		for (String titleId : idsToTitles.keySet()) {
 			final String title = idsToTitles.get(titleId);
-			final IMDBNode movie = new IMDBNode(title);
-			_movieNamesToNodes.put(title, movie);
+			final IMDBNode movieNode = new IMDBNode(title);
+			_movieNamesToNodes.put(title, movieNode);
+			_movies.add(movieNode);
 		}
 		// Now parse the actors
 		processActors(actorsFilename, idsToTitles);
@@ -182,7 +194,12 @@ public class IMDBGraphImpl implements IMDBGraph {
 		try {
 			final IMDBGraph graph = new IMDBGraphImpl(IMDB_DIRECTORY + "/testActors.tsv",
 			                                          IMDB_DIRECTORY + "/testMovies.tsv");
+			// name.basics.tsv.gz
+			// title.basics.tsv.gz
+
 			System.out.println(graph.getActors().size());
+			System.out.println(graph.getActors());
+			System.out.println(graph.getMovies().size());
 
 			final GraphSearchEngine graphSearcher = new GraphSearchEngineImpl();
 			while (true) {
