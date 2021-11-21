@@ -3,6 +3,7 @@ import java.util.*;
  * Interface for a node in a graph; each Node must have a name
  * and a Collection of neighbors. For example, the neighbors of 
  * an actress/actor node will be movies, and vice-versa.
+ *
  */
 interface Node {
 	public Node parent = null;
