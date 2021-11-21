@@ -37,18 +37,28 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 		Node tracker = target;
 		while(tracker != null){
 			path.add(found.get(tracker));
+			tracker = found.get(tracker);
 		}
-		path.add(start);
+
+		// reverse
+		if(path.get(path.size() -1) != start) {
+			path = null;
+		} else {
+			Collections.reverse(path);
+		}
+
 		return path;
 	}
 
 	/**
-	 * return the shortest path from start node to target node by specific algorithm
+	 * return the shortest path from start node to target node by specific algorithm or return null if this path does not exist
 	 * @param s the start node.
 	 * @param t the target node.
 	 * @return a linkList object which contain the nodes on the shortest path from the start node to the target node
 	 */
 	public List<Node> findShortestPath (Node s, Node t) {
-		return bfs(s, t);
+		if(s == null){
+			return null;
+		}else return bfs(s,t);
 	}
 }
