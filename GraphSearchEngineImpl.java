@@ -12,51 +12,40 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 	}
 
 	public List<Node> findShortestPath (Node s, Node t) {
+		if(s == null || t == null) return null;
 		return bfs(s, t);
 	}
 
 	private List<Node> bfs(Node s, Node t) {
-		List<Node> queue = new ArrayList<>();
-		List<Node> visited = new ArrayList<>();
-		Map<Node, Node> parents = new HashMap<>();
-		boolean targetFound = false;
+		ArrayDeque<Node> queue = new ArrayDeque<>();
+		Map<Node, Node> visited = new HashMap<>();
 
-		queue.add(s);
-
-		if(s == t) {
-			return queue;
-		}
-
-		while (!queue.isEmpty() && !targetFound) {
-			Node first = queue.get(0);
-			queue.remove(0);
-			visited.add(first);
-			for (Node n : first.getNeighbors()) {
-				if(!visited.contains(n)) {
-					queue.add(n);
-					parents.put(n, first);
-					if(n == t) {
-						targetFound = true;
-						break;
-					}
+		queue.addFirst(s);
+		visited.put(s, null);
+		while(!queue.isEmpty()) {
+			Node first = queue.pollFirst();
+			if(first == t) break;
+			for(Node n : first.getNeighbors()) {
+				if(!visited.containsKey(n)) {
+					queue.addLast(n);
+					visited.put(n, first);
 				}
 			}
 		}
-		return getPath(s, t, parents);
-	}
 
-	private List<Node> getPath(Node s, Node t, Map<Node, Node> parents) {
-		List<Node> path = new ArrayList<>();
-		Node prev = parents.get(t);
+		// review connections to create shortest path
+		List<Node> path = new LinkedList<>();
+		path.add(t);
+		Node prev = visited.get(t);
 		while(prev != null) {
 			path.add(prev);
-			System.out.println("Path: " + prev.getName());
-			prev = parents.get(prev);
+			prev = visited.get(prev);
 		}
 
-		// check that the path connects s and t
-
-		if(path != null) {
+		// if we did not connect back to s we do not have a path
+		if(path.get(path.size() - 1) != s) {
+			path = null;
+		} else {
 			Collections.reverse(path);
 		}
 

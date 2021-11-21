@@ -105,7 +105,7 @@ public class IMDBGraphImpl implements IMDBGraph {
 							}
 						}
 					}
-					_actors.add(actorNode);
+//					_actors.add(actorNode);
 				}
 			}
 		}
@@ -161,7 +161,7 @@ public class IMDBGraphImpl implements IMDBGraph {
 			final String title = idsToTitles.get(titleId);
 			final IMDBNode movieNode = new IMDBNode(title);
 			_movieNamesToNodes.put(title, movieNode);
-			_movies.add(movieNode);
+//			_movies.add(movieNode);
 		}
 		// Now parse the actors
 		processActors(actorsFilename, idsToTitles);
@@ -192,10 +192,12 @@ public class IMDBGraphImpl implements IMDBGraph {
 	 */
 	public static void main (String[] args) {
 		try {
-			final IMDBGraph graph = new IMDBGraphImpl(IMDB_DIRECTORY + "/someActors.tsv",
-			                                          IMDB_DIRECTORY + "/someMovies.tsv");
+			final IMDBGraph graph = new IMDBGraphImpl(IMDB_DIRECTORY + "/name.basics.tsv.gz",
+			                                          IMDB_DIRECTORY + "/title.basics.tsv.gz");
 			// name.basics.tsv.gz
+			// someActors.tsv
 			// title.basics.tsv.gz
+			// someMovies.tsv
 
 			System.out.println("# of Actors: " + graph.getActors().size());
 			System.out.println("# of Movies: " + graph.getMovies().size());
