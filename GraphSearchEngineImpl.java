@@ -4,74 +4,50 @@ import java.util.*;
  * Implements the GraphSearchEngine interface.
  */
 public class GraphSearchEngineImpl implements GraphSearchEngine {
-	//private Queue<Node> unvisited;
-	//private List<Node> visited  = new LinkedList<>();
-
-	private class Queue<T>{
-		private LinkedList<T> items;
-		public Queue(T firstItem){
-			items = new LinkedList<>();
-			items.add(firstItem);
-		}
-		public boolean contains(T item){
-			return items.contains(item);
-		}
-		public boolean isEmpty(){
-			return items.isEmpty();
-		}
-		public void enqueue(T item){
-			items.add(item);
-		}
-		public T dequeue(){
-			return items.removeFirst();
-		}
-	}
-
-	public GraphSearchEngineImpl () {
-	}
-//	public List<Node> bfs(List<Node> path,Node start, Node target){
-//		if(!visited.isEmpty()){
-//			List<Node> currentPath = path;
-//			currentPath.add(start);
-//			if(start == target){return currentPath;}
-//			Node node = unvisited.dequeue();
-//			visited.add(node);
-//			for(Node n: node.getNeighbors()){
-//				if(!visited.contains(n)){
-//					unvisited.enqueue(n);
-//				}
-//				bfs(currentPath, n,target);
-//			}
-//		}
-//		return null;
-//	}
+	/**
+	 * appling breadth first search to an given node and return the shortest path from this node to the target node
+	 * @param start the node which the searching start from
+	 * @param target the target node which is searched for
+	 * @return a linkedList which contain the nodes on the shortest path from the start node to the target node
+	 */
 	private List<Node> bfs(Node start, Node target){
-		ArrayDeque<Node> unvisited = new ArrayDeque<>();
-		Map<Node, Node> fund = new HashMap<>();
+		ArrayDeque<Node> unvisited = new ArrayDeque<>(); //the queue of the nodes await to be visited
+		Map<Node, Node> found = new HashMap<>(); // the nodes been found by the bfs search and their parent nodes,
+												 // they will be put in in format <this node, this node's parent>
 
+		//initialize the first node
 		unvisited.addLast(start);
-		fund.put(start, null);
+		found.put(start, null);
+
+		// do bfs on current node
 		while(!unvisited.isEmpty()){
 			Node currentNode = unvisited.pollFirst();
 			if(currentNode == target) break;
+			// match the nodes been visited with their parent nodes
 			for(Node n: currentNode.getNeighbors()){
-				if(!fund.containsKey(n)){
+				if(!found.containsKey(n)){
 					unvisited.addLast(n);
-					fund.put(n, currentNode);
+					found.put(n, currentNode);
 				}
 			}
 		}
-
+		//trace back from the target to the start
 		List<Node> path = new LinkedList<>();
 		path.add(target);
 		Node tracker = target;
 		while(tracker != null){
-			path.add(fund.get(tracker));
+			path.add(found.get(tracker));
 		}
 		path.add(start);
 		return path;
 	}
 
+	/**
+	 * return the shortest path from start node to target node by specific algorithm
+	 * @param s the start node.
+	 * @param t the target node.
+	 * @return a linkList object which contain the nodes on the shortest path from the start node to the target node
+	 */
 	public List<Node> findShortestPath (Node s, Node t) {
 		return bfs(s, t);
 	}
