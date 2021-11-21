@@ -192,14 +192,13 @@ public class IMDBGraphImpl implements IMDBGraph {
 	 */
 	public static void main (String[] args) {
 		try {
-			final IMDBGraph graph = new IMDBGraphImpl(IMDB_DIRECTORY + "/testActors.tsv",
-			                                          IMDB_DIRECTORY + "/testMovies.tsv");
+			final IMDBGraph graph = new IMDBGraphImpl(IMDB_DIRECTORY + "/someActors.tsv",
+			                                          IMDB_DIRECTORY + "/someMovies.tsv");
 			// name.basics.tsv.gz
 			// title.basics.tsv.gz
 
-			System.out.println(graph.getActors().size());
-			System.out.println(graph.getActors());
-			System.out.println(graph.getMovies().size());
+			System.out.println("# of Actors: " + graph.getActors().size());
+			System.out.println("# of Movies: " + graph.getMovies().size());
 
 			final GraphSearchEngine graphSearcher = new GraphSearchEngineImpl();
 			while (true) {
@@ -212,7 +211,7 @@ public class IMDBGraphImpl implements IMDBGraph {
 				final Node node2 = graph.getActor(actorName2);
 				if (node1 != null && node2 != null) {
 					List<Node> shortestPath = graphSearcher.findShortestPath(node1, node2);
-					System.out.println(node1 + " " + node2);
+					System.out.println(node1.getName() + " " + node2.getName());
 					if (shortestPath != null) {
 						for (Node node : shortestPath) {
 							System.out.println(node.getName());
@@ -220,6 +219,9 @@ public class IMDBGraphImpl implements IMDBGraph {
 					} else {
 						System.out.println("No path");
 					}
+				} else {
+					System.out.println(node1);
+					System.out.println(node2);
 				}
 			}
 		} catch (IOException ioe) {
