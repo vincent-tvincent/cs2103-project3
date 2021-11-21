@@ -4,8 +4,8 @@ import java.util.*;
  * Implements the GraphSearchEngine interface.
  */
 public class GraphSearchEngineImpl implements GraphSearchEngine {
-	private Queue<Node> unvisited;
-	private List<Node> visited  = new LinkedList<>();
+	//private Queue<Node> unvisited;
+	//private List<Node> visited  = new LinkedList<>();
 
 	private class Queue<T>{
 		private LinkedList<T> items;
@@ -29,25 +29,50 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 
 	public GraphSearchEngineImpl () {
 	}
-	public List<Node> bfs(List<Node> path,Node start, Node target){
-		if(!visited.isEmpty()){
-			List<Node> currentPath = path;
-			currentPath.add(start);
-			if(start == target){return currentPath;}
-			Node node = unvisited.dequeue();
-			visited.add(node);
-			for(Node n: node.getNeighbors()){
-				if(!visited.contains(n)){
-					unvisited.enqueue(n);
+//	public List<Node> bfs(List<Node> path,Node start, Node target){
+//		if(!visited.isEmpty()){
+//			List<Node> currentPath = path;
+//			currentPath.add(start);
+//			if(start == target){return currentPath;}
+//			Node node = unvisited.dequeue();
+//			visited.add(node);
+//			for(Node n: node.getNeighbors()){
+//				if(!visited.contains(n)){
+//					unvisited.enqueue(n);
+//				}
+//				bfs(currentPath, n,target);
+//			}
+//		}
+//		return null;
+//	}
+	private List<Node> bfs(Node start, Node target){
+		ArrayDeque<Node> unvisited = new ArrayDeque<>();
+		Map<Node, Node> fund = new HashMap<>();
+
+		unvisited.addLast(start);
+		fund.put(start, null);
+		while(!unvisited.isEmpty()){
+			Node currentNode = unvisited.pollFirst();
+			if(currentNode == target) break;
+			for(Node n: currentNode.getNeighbors()){
+				if(!fund.containsKey(n)){
+					unvisited.addLast(n);
+					fund.put(n, currentNode);
 				}
-				bfs(currentPath, n,target);
 			}
 		}
-		return null;
+
+		List<Node> path = new LinkedList<>();
+		path.add(target);
+		Node tracker = target;
+		while(tracker != null){
+			path.add(fund.get(tracker));
+		}
+		path.add(start);
+		return path;
 	}
+
 	public List<Node> findShortestPath (Node s, Node t) {
-		unvisited.enqueue(s);
-		return bfs(new LinkedList<Node>(),s,t);
-		// TODO implement me.
+		return bfs(s, t);
 	}
 }
