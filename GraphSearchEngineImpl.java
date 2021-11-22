@@ -22,6 +22,7 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 		// do bfs on current node
 		while(!unvisited.isEmpty()){
 			Node currentNode = unvisited.pollFirst();
+			System.out.println(currentNode.getName());
 			if(currentNode == target) break;
 			// match the nodes been visited with their parent nodes
 			for(Node n: currentNode.getNeighbors()){
@@ -34,9 +35,9 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 		//trace back from the target to the start
 		List<Node> path = new LinkedList<>();
 		path.add(target);
-		Node tracker = target;
+		Node tracker = found.get(target);
 		while(tracker != null){
-			path.add(found.get(tracker));
+			path.add(tracker);
 			tracker = found.get(tracker);
 		}
 
