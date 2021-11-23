@@ -33,7 +33,6 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 		}
 		//trace back from the target to the start
 		List<Node> path = new LinkedList<>();
-		path.add(target);
 		Node tracker = target;
 		while(tracker != null){
 			path.add(tracker);
@@ -56,7 +55,7 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 	 * @return a linkList object which contain the nodes on the shortest path from the start node to the target node
 	 */
 	public List<Node> findShortestPath (Node s, Node t) {
-		if(s == null){
+		if(s == null || t == null){
 			return null;
 		}else return bfs(s,t);
 	}
