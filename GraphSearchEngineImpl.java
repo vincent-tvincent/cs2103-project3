@@ -36,7 +36,7 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 		path.add(target);
 		Node tracker = target;
 		while(tracker != null){
-			path.add(found.get(tracker));
+			path.add(tracker);
 			tracker = found.get(tracker);
 		}
 
@@ -46,7 +46,6 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 		} else {
 			Collections.reverse(path);
 		}
-
 		return path;
 	}
 
