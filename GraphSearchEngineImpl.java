@@ -55,7 +55,7 @@ public class GraphSearchEngineImpl implements GraphSearchEngine {
 	 * @return a linkList object which contain the nodes on the shortest path from the start node to the target node
 	 */
 	public List<Node> findShortestPath (Node s, Node t) {
-		if(s == null || t == null){
+		if(s == null || t == null || s == t){
 			return null;
 		}else return bfs(s,t);
 	}

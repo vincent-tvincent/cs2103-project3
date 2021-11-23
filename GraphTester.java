@@ -16,45 +16,41 @@ public class GraphTester {
 	public GraphTester() throws IOException {
 	}
 
-	/**
-	 * Verifies that there is no shortest path between a specific pair of actors.
-	 */
+
 	@Test
-//	@Timeout(5)  // 5sec timeout on the test, in case there's a bug during search.
-	public void findShortestPathWhenNoneExists () {
-
-	}
-
-	//TODO: write tests..
-
-    //TODO: null node test
-	@Test
-	public void testNullNode(){
-		List<Node> path = searchEngine.findShortestPath(null,null);
+	public void testNullStartNode(){
+		List<Node> path = searchEngine.findShortestPath(null,graph.getActor("Kris"));
 		assertNull(path);
 	}
-	//TODO: no path test
+
 	@Test
+	public void testNullTargetNode(){
+		List<Node> path = searchEngine.findShortestPath(graph.getActor("Kris"),null);
+		assertNull(path);
+	}
+
+	@Test
+	// test the nodes with no path between them
 	public void testNoPath(){
-		List<Node> path = searchEngine.findShortestPath(graph.getActor("Sandy"), graph.getActor("Kris"));
+		List<Node> path = searchEngine.findShortestPath(graph.getActor("Sandy"), graph.getActor("rua?"));
 		assertNull(path);
 	}
-	//TODO: shortest test
+
 	@Test
+	// test if findShortestPath return the shortest path between two nodes
 	public void testShortestPath(){
-		List<Node> path = searchEngine.findShortestPath(graph.getActor("Sara"),graph.getActor("Sandy"));
+		List<Node> path = searchEngine.findShortestPath(graph.getActor("Kris"),graph.getActor("Gampel"));
 		for(Node n: path){
 			System.out.print(n.getName() + " ");
 		}
 
-		assertTrue(new Node[]{graph.getActor("Sara"),graph.getMovie("Blah3"), graph.getActor("Sandy")}.equals(path));
+		assertTrue(path.size() == 3);
 	}
-	//TODO: same node test
-	//TODO: ???
+
 	@Test
-	public void test(){
-		for(Node n: graph.getActors()){
-			System.out.print(n.getName() + " ");
-		}
+	// test the path between two same nodes (should be null)
+	public void sameNodeTest(){
+		List<Node> path = searchEngine.findShortestPath(graph.getActor("Kris"),graph.getActor("Kris"));
+		assertTrue(path == null);
 	}
 }
